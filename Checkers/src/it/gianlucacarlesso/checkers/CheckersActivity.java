@@ -2,7 +2,8 @@ package it.gianlucacarlesso.checkers;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.content.Intent;
+import android.view.View;
 
 public class CheckersActivity extends Activity {
 
@@ -11,12 +12,10 @@ public class CheckersActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_checkers);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.checkers, menu);
-		return true;
+	
+	public void startCheckerBoard(View view) {
+		Intent intent = new Intent(this, CheckerboardActivity.class);
+	    startActivity(intent);
 	}
 
 }
