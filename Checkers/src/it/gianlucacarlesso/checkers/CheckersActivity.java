@@ -12,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class CheckersActivity extends Activity {
@@ -42,6 +43,17 @@ public class CheckersActivity extends Activity {
 		Typeface typface = Typeface.createFromAsset(getAssets(), "fonts/english.ttf");
 		TextView title = (TextView) findViewById(R.id.title_app);
 		title.setTypeface(typface, Typeface.BOLD);
+		
+		typface = Typeface.createFromAsset(getAssets(), "fonts/curse_casual.ttf");
+		
+		Button button = (Button) findViewById(R.id.button_iavsia);
+		button.setTypeface(typface);
+		
+		button = (Button) findViewById(R.id.button_manvsia);
+		button.setTypeface(typface);
+		
+		title = (TextView) findViewById(R.id.copyright);
+		title.setTypeface(typface);
 	}
 
 	public void startCheckerBoard(View view) {

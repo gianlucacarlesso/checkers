@@ -9,23 +9,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 
 public class Board extends View {
 	private Context context;
 	private Bitmap board;
-	private int display_x, display_y;
 	private int shadow = 17;
 	private Point screen_size;
 
 	public Board(Context _context) {
 		super(_context);
 		context = _context;
-		setDimDisplay();
 
 		graphicInitialization();
 	}
@@ -33,7 +28,6 @@ public class Board extends View {
 	public Board(Context _context, AttributeSet attrs) {
 		super(_context, attrs);
 		context = _context;
-		setDimDisplay();
 
 		graphicInitialization();
 	}
@@ -41,7 +35,6 @@ public class Board extends View {
 	public Board(Context _context, AttributeSet attrs, int defStyle) {
 		super(_context, attrs, defStyle);
 		context = _context;
-		setDimDisplay();
 
 		graphicInitialization();
 	}
@@ -61,15 +54,6 @@ public class Board extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 
 		return false;
-	}
-
-	private void setDimDisplay() {
-		WindowManager wm = (WindowManager) context
-				.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-
-		display_x = display.getWidth();
-		display_y = display.getHeight();
 	}
 
 	private void graphicInitialization() {
