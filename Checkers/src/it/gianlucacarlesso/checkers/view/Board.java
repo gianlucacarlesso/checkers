@@ -7,9 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -18,13 +16,11 @@ import android.view.View;
 import android.view.WindowManager;
 
 public class Board extends View {
-	public static int NUM_BOX = 64;
-	public static int BOX_INLINE = 8;
-
 	private Context context;
 	private Bitmap board;
-	private int boarder_board = 30;
 	private int display_x, display_y;
+	private int shadow = 17;
+	private Point screen_size;
 
 	public Board(Context _context) {
 		super(_context);
@@ -38,7 +34,7 @@ public class Board extends View {
 		super(_context, attrs);
 		context = _context;
 		setDimDisplay();
-		
+
 		graphicInitialization();
 	}
 
@@ -46,14 +42,16 @@ public class Board extends View {
 		super(_context, attrs, defStyle);
 		context = _context;
 		setDimDisplay();
-		
+
 		graphicInitialization();
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		int pos_x = 25;
+		int pos_x = 0;
 		int pos_y = 0;
+
+		pos_x = (int) (1.0 * board.getWidth() / screen_size.x * shadow / 2);
 
 		// Draw picture of board
 		canvas.drawBitmap(board, pos_x, pos_y, null);
@@ -75,18 +73,16 @@ public class Board extends View {
 	}
 
 	private void graphicInitialization() {
+		screen_size = DisplayProperties.getMetrics(context);
+
 		// Load picture of board
 		Resources res = getResources();
 		board = BitmapFactory.decodeResource(res, R.drawable.board);
 
-		Point screen_size = DisplayProperties.getMetrics(context);
-		Log.i("SIZE", "w: " + screen_size.x + " h:" + screen_size.y);
+		int new_y_board = (int) (1.0 * screen_size.x / board.getWidth() * board
+				.getHeight());
 
-		int new_x_board = screen_size.x - boarder_board;
-		int new_y_board = (int) ((new_x_board / screen_size.x) * screen_size.y);
-		
-		Log.i("NEWSIZE", "w: " + new_x_board + " h: " + new_y_board);
-		board = Bitmap.createScaledBitmap(board, new_x_board, new_y_board,
+		board = Bitmap.createScaledBitmap(board, screen_size.x, new_y_board,
 				false);
 	}
 }
