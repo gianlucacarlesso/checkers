@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -47,13 +48,28 @@ public class Board extends View {
 		pos_x = (int) (1.0 * board.getWidth() / screen_size.x * shadow / 2);
 
 		// Draw picture of board
+
 		canvas.drawBitmap(board, pos_x, pos_y, null);
+
+		Log.i("XXX",
+				"Board w:" + board.getWidth() + " h:" + board.getHeight()
+						+ " - Canvas w:" + canvas.getWidth() + " h:"
+						+ canvas.getHeight() + " this:" + this.getHeight());
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 
 		return false;
+	}
+
+	@Override
+	protected void onMeasure(int w, int h) {
+		// I need to set the size of the view depending on the object that sign,
+		// otherwise occupy all the space
+		if (board != null) {
+			setMeasuredDimension(board.getWidth(), board.getHeight());
+		}
 	}
 
 	private void graphicInitialization() {
@@ -68,5 +84,6 @@ public class Board extends View {
 
 		board = Bitmap.createScaledBitmap(board, screen_size.x, new_y_board,
 				false);
+
 	}
 }

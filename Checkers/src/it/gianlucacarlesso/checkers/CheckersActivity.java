@@ -26,11 +26,13 @@ public class CheckersActivity extends Activity {
 		setContentView(R.layout.activity_checkers);
 
 		// Set activity background
-		View layout = getWindow().getDecorView().findViewById(android.R.id.content);
+		View layout = getWindow().getDecorView().findViewById(
+				android.R.id.content);
 		Drawable image = getResources().getDrawable(
 				R.drawable.background_checkers_activity);
-		
-		Point screen_size = DisplayProperties.getMetrics(getApplicationContext());
+
+		Point screen_size = DisplayProperties
+				.getMetrics(getApplicationContext());
 		image = ImageUtilities.resize(image, screen_size.x, screen_size.y);
 
 		if (Build.VERSION.SDK_INT >= 16) {
@@ -38,26 +40,34 @@ public class CheckersActivity extends Activity {
 		} else {
 			layout.setBackgroundDrawable(image);
 		}
-		
+
 		// Set font
-		Typeface typface = Typeface.createFromAsset(getAssets(), "fonts/english.ttf");
+		Typeface typface = Typeface.createFromAsset(getAssets(),
+				"fonts/english.ttf");
 		TextView title = (TextView) findViewById(R.id.title_app);
 		title.setTypeface(typface, Typeface.BOLD);
-		
-		typface = Typeface.createFromAsset(getAssets(), "fonts/curse_casual.ttf");
-		
+
+		typface = Typeface.createFromAsset(getAssets(),
+				"fonts/curse_casual.ttf");
+
 		Button button = (Button) findViewById(R.id.button_iavsia);
 		button.setTypeface(typface);
-		
+
 		button = (Button) findViewById(R.id.button_manvsia);
 		button.setTypeface(typface);
-		
+
 		title = (TextView) findViewById(R.id.copyright);
 		title.setTypeface(typface);
 	}
 
 	public void startCheckerBoard(View view) {
 		Intent intent = new Intent(this, CheckerboardActivity.class);
+
+		if (view.getId() == R.id.button_iavsia) {
+			intent.putExtra(CheckerboardActivity.GAME_MODE, 0);
+		} else {
+			intent.putExtra(CheckerboardActivity.GAME_MODE, 1);
+		}
 		startActivity(intent);
 	}
 

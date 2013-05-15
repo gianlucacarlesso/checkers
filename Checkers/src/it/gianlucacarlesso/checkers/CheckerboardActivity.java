@@ -5,13 +5,16 @@ import it.gianlucacarlesso.checkers.utilities.ImageUtilities;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
 public class CheckerboardActivity extends Activity {
+	public static String GAME_MODE = "game_mode";
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -35,6 +38,25 @@ public class CheckerboardActivity extends Activity {
 		} else {
 			layout.setBackgroundDrawable(image);
 		}
+
+		TextView player1 = (TextView) findViewById(R.id.player1);
+		TextView player2 = (TextView) findViewById(R.id.player2);
+		
+		// Set font
+		Typeface typface = Typeface.createFromAsset(getAssets(),
+				"fonts/curse_casual.ttf");
+		if (getIntent().getIntExtra(CheckerboardActivity.GAME_MODE, 0) == 0) {
+			// IA vs IA game mode
+			player1.setText(R.string.player_1);
+			player2.setText(R.string.player_2);
+		} else {
+			// Man vs IA game mode
+			player1.setText(R.string.player);
+			player2.setText(R.string.player_men);
+		}
+
+		player1.setTypeface(typface);
+		player2.setTypeface(typface);
 	}
 
 }
