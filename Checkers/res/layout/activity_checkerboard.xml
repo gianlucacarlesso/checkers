@@ -17,17 +17,47 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".CheckerboardActivity" >
 
+        <TextView
+            android:id="@+id/title_app"
+            style="@style/TextShadowBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="#808080"
+            android:textSize="95sp" />
+
+        <it.gianlucacarlesso.checkers.view.Board
+            android:id="@+id/board"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/button"
+            android:orientation="horizontal"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp" >
 
             <TextView
                 android:id="@+id/player1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/piece_black_vertical"
                 android:gravity="center"
+                android:paddingRight="12dp"
                 android:textColor="#ffffff"
                 android:textIsSelectable="false"
                 android:textSize="30sp" />
@@ -37,16 +67,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/piece_white_vertical"
                 android:gravity="center"
+                android:paddingLeft="12dp"
                 android:textColor="#ffffff"
                 android:textIsSelectable="false"
                 android:textSize="30sp" />
         </LinearLayout>
-
-        <it.gianlucacarlesso.checkers.view.Board
-            android:id="@+id/board"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </ScrollView>

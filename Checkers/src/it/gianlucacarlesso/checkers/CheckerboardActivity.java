@@ -24,6 +24,7 @@ public class CheckerboardActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_checkerboard);
 
+		// Set and rescale background
 		View layout = getWindow().getDecorView().findViewById(
 				android.R.id.content);
 		Drawable image = getResources().getDrawable(
@@ -41,9 +42,14 @@ public class CheckerboardActivity extends Activity {
 
 		TextView player1 = (TextView) findViewById(R.id.player1);
 		TextView player2 = (TextView) findViewById(R.id.player2);
-		
+
 		// Set font
 		Typeface typface = Typeface.createFromAsset(getAssets(),
+				"fonts/english.ttf");
+		TextView title = (TextView) findViewById(R.id.title_app);
+		title.setTypeface(typface, Typeface.BOLD);
+
+		typface = Typeface.createFromAsset(getAssets(),
 				"fonts/curse_casual.ttf");
 		if (getIntent().getIntExtra(CheckerboardActivity.GAME_MODE, 0) == 0) {
 			// IA vs IA game mode
