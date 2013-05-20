@@ -57,7 +57,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/piece_black_vertical"
                 android:gravity="center"
-                android:paddingRight="12dp"
+                android:paddingRight="10dp"
                 android:textColor="#ffffff"
                 android:textIsSelectable="false"
                 android:textSize="30sp" />
@@ -70,7 +70,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/piece_white_vertical"
                 android:gravity="center"
-                android:paddingLeft="12dp"
+                android:paddingLeft="10dp"
                 android:textColor="#ffffff"
                 android:textIsSelectable="false"
                 android:textSize="30sp" />

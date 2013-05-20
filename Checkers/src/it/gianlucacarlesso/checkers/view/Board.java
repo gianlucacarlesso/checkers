@@ -2,6 +2,7 @@ package it.gianlucacarlesso.checkers.view;
 
 import it.gianlucacarlesso.checkers.R;
 import it.gianlucacarlesso.checkers.utilities.DisplayProperties;
+import android.R.integer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,8 +17,19 @@ import android.view.View;
 public class Board extends View {
 	private Context context;
 	private Bitmap board;
+	private Bitmap piece_black;
+	private Bitmap piece_white;
 	private int shadow = 17;
 	private Point screen_size;
+	private static int NUM_BOX_ROW = 8;
+	private static Point SIZE_BOARD_ORIGIN = new Point(1319, 1406);
+	private static Point CENTER_BOARD_ORIGIN = new Point(649, 627);
+	private static Point SIZE_BOX_ORIGIN = new Point(140, 140);
+
+	int box_size_x;
+	int box_size_y;
+	int board_center_x;
+	int board_center_y;
 
 	public Board(Context _context) {
 		super(_context);
@@ -48,13 +60,13 @@ public class Board extends View {
 		pos_x = (int) (1.0 * board.getWidth() / screen_size.x * shadow / 2);
 
 		// Draw picture of board
-
 		canvas.drawBitmap(board, pos_x, pos_y, null);
 
-		Log.i("XXX",
-				"Board w:" + board.getWidth() + " h:" + board.getHeight()
-						+ " - Canvas w:" + canvas.getWidth() + " h:"
-						+ canvas.getHeight() + " this:" + this.getHeight());
+		// Draw pieces
+		int correct = (int) ((box_size_x - piece_black.getWidth()) / 2.0);
+		Log.i("XXX", "CO: " + correct +"--" + "b:" + box_size_x + "---" + piece_black.getWidth());
+		canvas.drawBitmap(piece_black, board_center_x - box_size_x - correct,
+				board_center_y - box_size_y - correct, null);
 	}
 
 	@Override
@@ -84,6 +96,28 @@ public class Board extends View {
 
 		board = Bitmap.createScaledBitmap(board, screen_size.x, new_y_board,
 				false);
+
+		// Load pieces images
+		piece_black = BitmapFactory.decodeResource(res,
+				R.drawable.piece_black_horizontal);
+		piece_white = BitmapFactory.decodeResource(res,
+				R.drawable.piece_white_horizontal);
+
+		int new_x_piece = (int) (board.getWidth() / (NUM_BOX_ROW + 1.3));
+		int new_y_piece = (int) (1.0 * piece_black.getHeight()
+				/ piece_black.getWidth() * new_x_piece);
+
+		piece_black = Bitmap.createScaledBitmap(piece_black, new_x_piece,
+				new_y_piece, false);
+		piece_white = Bitmap.createScaledBitmap(piece_white, new_x_piece,
+				new_y_piece, false);
+
+		board_center_x = (int) (1.0 * board.getWidth() / SIZE_BOARD_ORIGIN.x * CENTER_BOARD_ORIGIN.x);
+		board_center_y = (int) (1.0 * board.getHeight() / SIZE_BOARD_ORIGIN.y * CENTER_BOARD_ORIGIN.y);
+
+		box_size_x = (int) (1.0 * board.getWidth() / SIZE_BOARD_ORIGIN.x * SIZE_BOX_ORIGIN.x);
+		box_size_y = (int) (1.0 * board.getHeight() / SIZE_BOARD_ORIGIN.y * SIZE_BOX_ORIGIN.y);
+		Log.i("BOX", box_size_x +"-"+box_size_y);
 
 	}
 }
