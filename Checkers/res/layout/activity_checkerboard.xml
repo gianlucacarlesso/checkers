@@ -27,7 +27,7 @@
             android:textColor="#808080"
             android:textSize="95sp" />
 
-        <it.gianlucacarlesso.checkers.view.Board
+        <it.gianlucacarlesso.checkers.view.GBoard
             android:id="@+id/board"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,10 +44,10 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/button"
             android:orientation="horizontal"
-            android:paddingBottom="15dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="15dp" >
+            android:paddingTop="10dp" >
 
             <TextView
                 android:id="@+id/player1"

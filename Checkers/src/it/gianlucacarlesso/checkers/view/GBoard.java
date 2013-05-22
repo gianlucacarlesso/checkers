@@ -1,6 +1,7 @@
 package it.gianlucacarlesso.checkers.view;
 
 import it.gianlucacarlesso.checkers.R;
+import it.gianlucacarlesso.checkers.logic.Board;
 import it.gianlucacarlesso.checkers.utilities.DisplayProperties;
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,15 +10,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class Board extends View {
-	private static int NUM_BOX_ROW = 8;
-	private static int PLAYER_ROWS = 3;
+public class GBoard extends View {
 	private static Point SIZE_BOARD_ORIGIN = new Point(1319, 1406);
 	private static Point CENTER_BOARD_ORIGIN = new Point(649, 627);
 	private static Point SIZE_BOX_ORIGIN = new Point(140, 140);
+	private Board board_logic = new Board();
 
 	private Context context;
 	private Bitmap board;
@@ -25,28 +26,29 @@ public class Board extends View {
 	private Bitmap piece_white;
 	private int shadow = 17;
 	private Point screen_size;
-	private Point[][] matrix = new Point[NUM_BOX_ROW][NUM_BOX_ROW];
+	private Point[][] matrix = new Point[Board.NUM_BOX_ROW][Board.NUM_BOX_ROW];
+	private int startGame = 0;
 
 	int box_size_x;
 	int box_size_y;
 	int board_center_x;
 	int board_center_y;
 
-	public Board(Context _context) {
+	public GBoard(Context _context) {
 		super(_context);
 		context = _context;
 
 		graphicInitialization();
 	}
 
-	public Board(Context _context, AttributeSet attrs) {
+	public GBoard(Context _context, AttributeSet attrs) {
 		super(_context, attrs);
 		context = _context;
 
 		graphicInitialization();
 	}
 
-	public Board(Context _context, AttributeSet attrs, int defStyle) {
+	public GBoard(Context _context, AttributeSet attrs, int defStyle) {
 		super(_context, attrs, defStyle);
 		context = _context;
 
@@ -55,50 +57,48 @@ public class Board extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
+		Log.i("onDraw", "Chiamato...");
 		int pos_x = 0;
 		int pos_y = 0;
-
 		pos_x = (int) (1.0 * board.getWidth() / screen_size.x * shadow / 2);
 
 		// Draw picture of board
 		canvas.drawBitmap(board, pos_x, pos_y, null);
 
-		// Draw pieces
 		int correct = (int) ((box_size_x + pos_x - piece_black.getWidth()) / 2.0);
+		if (startGame < 2) {
+			startGame++;
 
-		// Black pieces
-		int rows = 0;
-		for (int i = 0; i < PLAYER_ROWS; i++) {
-			int j = 1;
-			if (i % 2 == 1) {
-				j = 0;
-			}
-			for (; j < NUM_BOX_ROW; j += 2) {
-				canvas.drawBitmap(piece_black, matrix[i][j].x + correct
-						+ ((int) (pos_x / 2.0) + 2), matrix[i][j].y + correct,
-						null);
-			}
-			rows += 1;
+			// Draw pieces
+			drawPiecesStart(canvas, correct, pos_x);
+		} else {
 
-		}
-
-		// White pieces
-		for (int i = NUM_BOX_ROW - PLAYER_ROWS; i < NUM_BOX_ROW; i++) {
-			int j = 1;
-			if (i % 2 == 1) {
-				j = 0;
-			}
-			for (; j < NUM_BOX_ROW; j += 2) {
-				canvas.drawBitmap(piece_white, matrix[i][j].x
-						+ correct + ((int) (pos_x / 2.0) + 2), matrix[i][j].y
-						+ correct, null);
-			}
 		}
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		float x = event.getX();
+		float y = event.getY();
 
+		for (int i = 0; i < Board.NUM_BOX_ROW; i++) {
+			for (int j = 0; j < Board.NUM_BOX_ROW; j++) {
+				if (matrix[i][j].x <= (int) x
+						&& matrix[i][j].x + box_size_x >= (int) x
+						&& matrix[i][j].y <= (int) y
+						&& matrix[i][j].y + box_size_y >= (int) y) {
+
+					if (board_logic.board[i][j] != null) {
+						Log.i("XXX", "C'è una pedina, giocatore:"
+								+ board_logic.board[i][j].player);
+						this.invalidate();
+					}
+
+					i = Board.NUM_BOX_ROW + 1;
+					j = Board.NUM_BOX_ROW + 1;
+				}
+			}
+		}
 		return false;
 	}
 
@@ -106,6 +106,8 @@ public class Board extends View {
 	protected void onMeasure(int w, int h) {
 		// I need to set the size of the view depending on the object that sign,
 		// otherwise occupy all the space
+
+		Log.i("onMeasure", "Chiamato...");
 		if (board != null) {
 			setMeasuredDimension(board.getWidth(), board.getHeight());
 		}
@@ -136,7 +138,7 @@ public class Board extends View {
 		piece_white = BitmapFactory.decodeResource(res,
 				R.drawable.piece_white_horizontal);
 
-		int new_x_piece = (int) (board.getWidth() / (NUM_BOX_ROW + 1.3));
+		int new_x_piece = (int) (board.getWidth() / (Board.NUM_BOX_ROW + 1.3));
 		if (new_x_piece >= box_size_x) {
 			new_x_piece = box_size_x - 5;
 		}
@@ -149,15 +151,43 @@ public class Board extends View {
 				new_y_piece, false);
 
 		// Calculating all the boxes of Damiera
-		int xbox = board_center_x - box_size_x * NUM_BOX_ROW / 2;
-		int ybox = board_center_y - box_size_y * NUM_BOX_ROW / 2;
-		for (int i = 0; i < NUM_BOX_ROW; i++) {
-			for (int j = 0; j < NUM_BOX_ROW; j++) {
+		int xbox = board_center_x - box_size_x * Board.NUM_BOX_ROW / 2;
+		int ybox = board_center_y - box_size_y * Board.NUM_BOX_ROW / 2;
+		for (int i = 0; i < Board.NUM_BOX_ROW; i++) {
+			for (int j = 0; j < Board.NUM_BOX_ROW; j++) {
 				matrix[i][j] = new Point(xbox, ybox);
 				xbox += box_size_x;
 			}
-			xbox = board_center_x - box_size_x * NUM_BOX_ROW / 2;
+			xbox = board_center_x - box_size_x * Board.NUM_BOX_ROW / 2;
 			ybox += box_size_y;
+		}
+	}
+
+	private void drawPiecesStart(Canvas canvas, int correct, int pos_x) {
+		// Black pieces
+		for (int i = 0; i < Board.PLAYER_ROWS; i++) {
+			int j = 1;
+			if (i % 2 == 1) {
+				j = 0;
+			}
+			for (; j < Board.NUM_BOX_ROW; j += 2) {
+				canvas.drawBitmap(piece_black, matrix[i][j].x + correct
+						+ ((int) (pos_x / 2.0) + 2), matrix[i][j].y + correct,
+						null);
+			}
+		}
+
+		// White pieces
+		for (int i = Board.NUM_BOX_ROW - Board.PLAYER_ROWS; i < Board.NUM_BOX_ROW; i++) {
+			int j = 1;
+			if (i % 2 == 1) {
+				j = 0;
+			}
+			for (; j < Board.NUM_BOX_ROW; j += 2) {
+				canvas.drawBitmap(piece_white, matrix[i][j].x + correct
+						+ ((int) (pos_x / 2.0) + 2), matrix[i][j].y + correct,
+						null);
+			}
 		}
 	}
 }
