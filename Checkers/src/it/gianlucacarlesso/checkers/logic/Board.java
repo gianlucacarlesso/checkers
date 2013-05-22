@@ -13,8 +13,9 @@ public class Board {
 	public Board() {
 		// I make a connection between the player's pawns and pawns in
 		// Damiera
-		initBoard(0, 1, player_black.length, true);
-		initBoard(Board.NUM_BOX_ROW - Board.PLAYER_ROWS, 0, player_white.length, false);
+		initBoard(0, 1, Piece.PLAYER_BLACK, true, player_black);
+		initBoard(Board.NUM_BOX_ROW - Board.PLAYER_ROWS, 0, Piece.PLAYER_WHITE,
+				false, player_white);
 	}
 
 	public Piece[] getPlayerBlack() {
@@ -25,11 +26,11 @@ public class Board {
 		return player_white;
 	}
 
-	private void initBoard(int xpos, int ypos, int player, boolean alternate) {
-		for (int i = 0; i < player_black.length; i++) {
-			player_black[i] = new Piece(xpos, ypos, Piece.PLAYER_BLACK);
-
-			board[xpos][ypos] = player_black[i];
+	private void initBoard(int xpos, int ypos, int player, boolean alternate,
+			Piece[] player_pieces) {
+		for (int i = 0; i < PLAYER_PIECES; i++) {
+			player_pieces[i] = new Piece(xpos, ypos, player);
+			board[xpos][ypos] = player_pieces[i];
 
 			ypos += 2;
 			if (ypos >= Board.NUM_BOX_ROW) {

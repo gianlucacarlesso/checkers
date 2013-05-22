@@ -7,6 +7,12 @@ public class Piece {
 	public int x;
 	public int y;
 	public int player;
+
+	public Piece(int _x, int _y) {
+		x = _x;
+		y = _y;
+		player = -1;
+	}
 	
 	public Piece(int _x, int _y, int _player) {
 		x = _x;
